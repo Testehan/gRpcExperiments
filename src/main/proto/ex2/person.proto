@@ -1,0 +1,31 @@
+/*
+  This is my first proto. Since a Google plugin was installed you have code
+  completion and highlithing in files of this type.
+ */
+
+syntax = "proto3";
+
+package ex02;
+
+option java_package = "com.testehan.models.ex02";
+option java_multiple_files = true;
+
+message Address {
+  int32 postbox = 1;
+  string street = 2;
+  string city = 3;
+}
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+}
+
+message Person {
+  // in proto version 3, all fields are by default "required", so there is no need to specify anything
+  string name = 1;
+  int32 age = 2;
+  Address address = 3;
+  Car car = 4;
+}
