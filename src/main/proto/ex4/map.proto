@@ -1,0 +1,29 @@
+/*
+  This is my first proto. Since a Google plugin was installed you have code
+  completion and highlithing in files of this type.
+ */
+
+syntax = "proto3";
+
+package ex04;
+
+option java_package = "com.testehan.models.ex04";
+option java_multiple_files = true;
+
+enum BodyStyle {
+  UNKNOWN = 0;
+  SEDAN = 1;
+  COUPE = 2;
+  SUV = 3;
+}
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+  BodyStyle body_style = 4;
+}
+
+message Dealer {
+  map<int32, Car> inventory = 1;
+}
