@@ -4,6 +4,7 @@ package ex5;
 
 import "ex5/common/address.proto";    // need to import in order to use
 import "ex5/common/car.proto";
+import "google/protobuf/timestamp.proto"; // google also offers some types
 
 option java_multiple_files = true;
 option java_package = "com.testehan.models.ex05";
@@ -14,5 +15,6 @@ message Person {
   optional int32 age = 2;
   ex5.common.Address address = 3;   // need to specify package in order to use
   ex5.common.Car car = 4;
+  google.protobuf.Timestamp time = 5;
 
 }

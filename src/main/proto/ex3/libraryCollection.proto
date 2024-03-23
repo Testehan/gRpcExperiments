@@ -5,7 +5,7 @@
 
 syntax = "proto3";
 
-package ex03;
+package ex3;
 
 option java_package = "com.testehan.models.ex03";
 option java_multiple_files = true;
