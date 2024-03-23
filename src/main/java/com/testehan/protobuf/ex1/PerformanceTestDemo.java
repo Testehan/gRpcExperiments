@@ -37,6 +37,7 @@ public class PerformanceTestDemo {
     private static Runnable getProtoRunnable(Person person) {
         Runnable protoRunnable = () -> {
             byte[] bytesRepresentationOfPerson = person.toByteArray();
+            System.out.println(bytesRepresentationOfPerson.length);
             try {
                 Person.parseFrom(bytesRepresentationOfPerson);
             } catch (InvalidProtocolBufferException e) {
@@ -52,6 +53,7 @@ public class PerformanceTestDemo {
         Runnable jsonRunnable = () -> {
             try {
                 byte[] bytes = mapper.writeValueAsBytes(jsonPerson);
+                System.out.println(bytes.length);
                 var jsonPersonRead = mapper.readValue(bytes, JsonPerson.class);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -62,7 +64,7 @@ public class PerformanceTestDemo {
 
     private static void runTest(String testName, Runnable runnable){
         var start = System.currentTimeMillis();
-        for (int i = 0; i < 5_000_000; i++) {
+        for (int i = 0; i < 1; i++) {   //5_000_000
             runnable.run();
         }
         var end = System.currentTimeMillis();

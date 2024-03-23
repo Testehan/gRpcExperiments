@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package ex7.v3;
+
+option java_multiple_files = true;
+option java_package = "com.testehan.models.ex07.v3";
+
+/*
+    Requirement:
+    - We NO longer need model/year! remove that!
+ */
+message Television {
+  string brand = 1;
+
+  reserved 2;         // these are needed so that nobody uses 2 and the old delete field names, as that will break older versions
+  reserved "year", "model";
+
+  Type type = 3;
+}
+
+enum Type {
+  HD = 0;
+  UHD = 1;
+  OLED = 2;
+}

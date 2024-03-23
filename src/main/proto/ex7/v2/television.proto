@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ex7.v2;
+
+option java_multiple_files = true;
+option java_package = "com.testehan.models.ex07.v2";
+
+message Television {
+  string brand = 1;
+  // changed year to a different name, "model"
+  int32 model = 2;
+  Type type = 3;
+}
+
+enum Type {
+  HD = 0;
+  UHD = 1;
+  OLED = 2;
+}
