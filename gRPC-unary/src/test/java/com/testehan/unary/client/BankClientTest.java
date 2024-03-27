@@ -26,7 +26,7 @@ public class BankClientTest {
 
     @Test
     public void getAccountBallance(){
-        var balanceCheckRequest = BalanceCheckRequest.newBuilder().setAccountNumber(10).build();
+        var balanceCheckRequest = BalanceCheckRequest.newBuilder().setAccountNumber(7).build();
         var accountBalance = this.bankServiceBlockingStub.getAccountBalance(balanceCheckRequest);
 
         System.out.println(accountBalance);
