@@ -43,7 +43,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
             AccountRepository.deductAmount(accountNumber,10);
             try {
                 System.out.println("Sending 10 money !");
-                Thread.sleep(5000);     // for testing purposes :)
+                Thread.sleep(2000);     // for testing purposes :)
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
