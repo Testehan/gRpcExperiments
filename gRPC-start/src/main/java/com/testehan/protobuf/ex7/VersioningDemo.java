@@ -29,7 +29,7 @@ public class VersioningDemo {
 //        var television = Television.newBuilder().setBrand("Samsung").setYear(2023).build();
 //
 //        // serialization        // the extension of the file can be other as well...it is just random here
-//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/television.serialized");
+//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/television.serialized");
 //        Files.write(path, television.toByteArray());
 //
 //        // deserialization
@@ -42,7 +42,7 @@ public class VersioningDemo {
 //        // this should use com.testehan.models.ex07.v2.Television
 //
 //        // serialization        // the extension of the file can be other as well...it is just random here
-//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/television.serialized");
+//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/television.serialized");
 //
 //        // deserialization
 //        byte[] bytesRepresentationOfTelevision = Files.readAllBytes(path);
@@ -58,7 +58,7 @@ public class VersioningDemo {
 //                .setBrand("Samsung").setModel(2023).setType(Type.OLED).build();
 //
 //        // serialization        // the extension of the file can be other as well...it is just random here
-//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/televisionV2.serialized");
+//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/televisionV2.serialized");
 //        Files.write(path, television.toByteArray());
 //
 //        // deserialization
@@ -71,7 +71,7 @@ public class VersioningDemo {
 //        // this should use com.testehan.models.ex07.v1.Television
 //
 //        // serialization        // the extension of the file can be other as well...it is just random here
-//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/televisionV2.serialized");
+//        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/televisionV2.serialized");
 //
 //        // deserialization
 //        byte[] bytesRepresentationOfTelevision = Files.readAllBytes(path);
@@ -84,7 +84,7 @@ public class VersioningDemo {
         // this should use com.testehan.models.ex07.v3.Television
 
         // serialization        // the extension of the file can be other as well...it is just random here
-        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/television.serialized");
+        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/television.serialized");
 
         // deserialization
         byte[] bytesRepresentationOfTelevision = Files.readAllBytes(path);

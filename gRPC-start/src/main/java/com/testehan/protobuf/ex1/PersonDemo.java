@@ -16,7 +16,7 @@ public class PersonDemo {
         System.out.println(person.equals(person2));     // true
 
         // serialization        // the extension of the file can be other as well...it is just random here
-        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/target/person.serialized");
+        var path = Paths.get("/Users/danteshte/JavaProjects/gRpcExperiments/gRPC-start/target/person.serialized");
         Files.write(path, person.toByteArray());
 
         // deserialization
