@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+
+option java_multiple_files = true;
+option java_package = "com.testehan.models.ex08";
+
+message BalanceCheckRequest {
+  int32 account_number = 1;
+}
+
+message AccountBalance {
+  int32 account_number = 1;
+  int32 balance = 2;
+}
+
+service BankService {
+  rpc GetAccountBalance(BalanceCheckRequest) returns (AccountBalance);
+
+}
