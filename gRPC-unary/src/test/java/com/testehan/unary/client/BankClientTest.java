@@ -1,13 +1,11 @@
 package com.testehan.unary.client;
 
 
-import com.testehan.models.ex08.AccountBalance;
-import com.testehan.models.ex08.BalanceCheckRequest;
-import com.testehan.models.ex08.BankServiceGrpc;
-import com.testehan.models.ex08.WithdrawRequest;
+import com.testehan.models.ex08.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -75,5 +73,21 @@ public class BankClientTest {
 
         countDownLatch.await();     // wait until the Async call finishes
 
+    }
+
+    @Test   // asynch client streaming example
+    public void cashStreamingRequest() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        StreamObserver<DepositRequest> streamObserver = this.bankServiceStub.deposit(new BalanceStreamObserver(countDownLatch));
+
+        for (int i = 0 ; i<10; i++){
+            DepositRequest depositRequest = DepositRequest.newBuilder().setAccountNumber(8).setMoney(Money.newBuilder().setAmount(10).build()).build();
+            streamObserver.onNext(depositRequest);
+        }
+
+        streamObserver.onCompleted();
+
+        countDownLatch.await();
     }
 }

@@ -2,6 +2,7 @@ package com.testehan.unary.server;
 
 import com.testehan.models.ex08.*;
 import com.testehan.unary.server.repository.AccountRepository;
+import com.testehan.unary.server.request.CashStreamingRequest;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
@@ -51,5 +52,10 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
 
         // mark operation as completed
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public StreamObserver<DepositRequest> deposit(StreamObserver<AccountBalance> responseObserver) {
+        return new CashStreamingRequest(responseObserver);
     }
 }
