@@ -12,6 +12,7 @@
     <modules>
         <module>gRPC-start</module>
         <module>gRPC-4-types</module>
+      <module>gRPC-snake-ladders</module>
     </modules>
 
   <properties>

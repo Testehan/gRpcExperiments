@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.testehan.snake.models";
+
+// this is what the client sends to the server
+message Die {
+  int32 value = 1;
+}
+
+message Player {
+  string name = 1;
+  int32 position = 2;
+}
+
+// this is what the server sends to the client
+message GameState{
+  repeated Player player = 1;
+}
+
+service GameService{
+  rpc roll(stream Die) returns (stream GameState);
+}
