@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+// EXAMPLE of bidirectional streaming
+
+import "bank-service.proto";
+
+option java_multiple_files = true;
+option java_package = "com.testehan.models.ex08";
+
+message TransferRequest {
+  int32 from_account = 1;
+  int32 to_account = 2;
+  int32 amount = 3;
+}
+
+enum TransferStatus {
+  FAILED = 0;
+  SUCCESS = 1;
+}
+
+message TransferResponse {
+  TransferStatus status = 1;
+  AccountBalance from_account = 2;
+  AccountBalance to_account = 3;
+}
+
+service TransferService {
+  // bidirectional streaming
+  rpc Transfer(stream TransferRequest) returns (stream TransferResponse);
+}

@@ -30,4 +30,8 @@ public class AccountRepository {
         return Collections.unmodifiableMap(db);
     }
 
+    public static void printAllAccounts(){
+        System.out.println(db);
+    }
+
 }
