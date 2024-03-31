@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gRPC-unary</artifactId>
+    <artifactId>gRPC-4-types</artifactId>
     <packaging>jar</packaging>
 
-    <name>gRPC-unary</name>
+    <name>gRPC-4-types</name>
     <url>http://maven.apache.org</url>
 
     <properties>
