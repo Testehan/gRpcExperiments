@@ -1,4 +1,4 @@
-package com.testehan.loadbalancing.client;
+package com.testehan.loadbalancing.serverside;
 
 import com.testehan.models.ex08.BalanceCheckRequest;
 import com.testehan.models.ex08.BankServiceGrpc;
@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NginxCientTest {
+public class ServerSideLoadBalancingTest {
 
     private BankServiceGrpc.BankServiceBlockingStub bankServiceBlockingStub;
     private BankServiceGrpc.BankServiceStub bankServiceStub;
@@ -58,7 +58,11 @@ public class NginxCientTest {
         StreamObserver<DepositRequest> streamObserver = this.bankServiceStub.deposit(new BalanceStreamObserver(latch));
 
         for (int i = 0; i < 10; i++) {
-            DepositRequest depositRequest = DepositRequest.newBuilder().setAccountNumber(8).setMoney(Money.newBuilder().setAmount(10).build()).build();
+            DepositRequest depositRequest = DepositRequest.newBuilder()
+                    .setAccountNumber(8)
+                    .setMoney(
+                            Money.newBuilder().setAmount(10).build()
+                    ).build();
             streamObserver.onNext(depositRequest);
         }
         streamObserver.onCompleted();

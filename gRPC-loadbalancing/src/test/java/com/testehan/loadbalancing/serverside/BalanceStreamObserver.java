@@ -1,4 +1,4 @@
-package com.testehan.loadbalancing.client;
+package com.testehan.loadbalancing.serverside;
 
 import com.testehan.models.ex08.AccountBalance;
 import io.grpc.stub.StreamObserver;
