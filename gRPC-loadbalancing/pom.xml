@@ -11,6 +11,9 @@
     <packaging>jar</packaging>
 
     <name>gRPC-loadbalancing</name>
+    <description>This module offers an example of a server side load balancing via Nginx and a
+        client side load balancing via a simple ServiceRegistry class
+    </description>
     <url>http://maven.apache.org</url>
 
     <dependencies>

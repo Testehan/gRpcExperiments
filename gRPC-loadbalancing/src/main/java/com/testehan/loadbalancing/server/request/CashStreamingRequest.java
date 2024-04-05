@@ -18,7 +18,7 @@ public class CashStreamingRequest implements StreamObserver<DepositRequest> {
     public void onNext(DepositRequest depositRequest) {
         var accountNr = depositRequest.getAccountNumber();
         var amount = depositRequest.getMoney().getAmount();
-
+        System.out.println("Recieved " + amount + " for account number " + accountNr);
         accountBalance = AccountRepository.addAmount(accountNr,amount);
     }
 
