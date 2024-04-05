@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+
+option java_multiple_files = true;
+option java_package = "com.testehan.models.ex08";
+
+message BalanceCheckRequest {
+  int32 account_number = 1;
+}
+
+message AccountBalance {
+  int32 account_number = 1;
+  int32 balance = 2;
+}
+
+message WithdrawRequest {
+  int32 account_number = 1;
+  int32 amount = 2;
+}
+
+message Money {
+  int32 amount = 1;
+}
+
+message DepositRequest {
+    int32 account_number = 1;
+    Money money = 2;
+}
+
+service BankService {
+
+  // unary rpc
+  rpc GetAccountBalance(BalanceCheckRequest) returns (AccountBalance);
+
+  // server streaming
+  rpc Withdraw(WithdrawRequest) returns (stream Money);
+
+  // client streaming
+  rpc Deposit(stream DepositRequest) returns (AccountBalance);
+}
