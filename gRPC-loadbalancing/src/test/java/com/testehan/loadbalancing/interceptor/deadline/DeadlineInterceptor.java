@@ -1,4 +1,4 @@
-package com.testehan.loadbalancing.deadline;
+package com.testehan.loadbalancing.interceptor.deadline;
 
 import io.grpc.*;
 

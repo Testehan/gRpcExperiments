@@ -1,13 +1,16 @@
-package com.testehan.loadbalancing.server;
+package com.testehan.loadbalancing.server.interceptor.deadline;
 
-import com.testehan.models.ex08.*;
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.testehan.loadbalancing.server.repository.AccountRepository;
 import com.testehan.loadbalancing.server.request.CashStreamingRequest;
+import com.testehan.models.ex08.*;
+import io.grpc.Context;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
+import java.util.concurrent.TimeUnit;
 
-public class BankService extends BankServiceGrpc.BankServiceImplBase{
+public class BankServiceWithDeadline extends BankServiceGrpc.BankServiceImplBase{
 
     @Override
     public void getAccountBalance(BalanceCheckRequest request, StreamObserver<AccountBalance> responseObserver) {
@@ -20,6 +23,9 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
                 .setAccountNumber(accountNumber)
                 .build();
 
+        //simulate time-consuming call
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+
         // set the value to be returned
         responseObserver.onNext(accountBalance);
 
@@ -27,7 +33,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
         responseObserver.onCompleted();
     }
 
-    @Override
+    @Override       // with deadline (timeout) support
     public void withdraw(WithdrawRequest request, StreamObserver<Money> responseObserver) {
         var accountNumber = request.getAccountNumber();
         var amount = request.getAmount();   // for this example we assume that this number is a multiple of 10
@@ -42,13 +48,15 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
 
         for (int i = 0; i< amount / 10; i++){   // because we send back in 10 dollar increments
             var money = Money.newBuilder().setAmount(10).build();
-            responseObserver.onNext(money);
-            AccountRepository.deductAmount(accountNumber,10);
-            try {
-                System.out.println("Sending 10 money !");
-                Thread.sleep(2000);     // for testing purposes :)
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            //simulate time-consuming call
+            Uninterruptibles.sleepUninterruptibly(3, TimeUnit.SECONDS);
+            if(!Context.current().isCancelled()){
+                responseObserver.onNext(money);
+                System.out.println("Delivered $10");
+                AccountRepository.deductAmount(accountNumber, 10);
+            }else{
+                System.out.println("withdraw operation not performed because of timeout");
+                break;
             }
         }
 

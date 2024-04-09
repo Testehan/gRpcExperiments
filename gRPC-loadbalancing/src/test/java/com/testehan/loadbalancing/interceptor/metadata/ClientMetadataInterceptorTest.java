@@ -1,21 +1,22 @@
-package com.testehan.loadbalancing.clientside;
+package com.testehan.loadbalancing.interceptor.metadata;
 
-import com.testehan.loadbalancing.serverside.BalanceStreamObserver;
-import com.testehan.models.ex08.*;
+import com.testehan.loadbalancing.clientside.ServiceRegistry;
+import com.testehan.loadbalancing.clientside.TempNameResolverProvider;
+import com.testehan.models.ex08.BalanceCheckRequest;
+import com.testehan.models.ex08.BankServiceGrpc;
+import com.testehan.models.ex08.WithdrawRequest;
 import io.grpc.*;
-import io.grpc.stub.StreamObserver;
+import io.grpc.stub.MetadataUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ClientSideLoadBalancingTest {
+public class ClientMetadataInterceptorTest {
     private BankServiceGrpc.BankServiceBlockingStub blockingStub;
     private BankServiceGrpc.BankServiceStub bankServiceStub;
 
@@ -30,6 +31,7 @@ public class ClientSideLoadBalancingTest {
         ManagedChannel managedChannel = ManagedChannelBuilder
                 //.forAddress("localhost", 8585)
                 .forTarget("bank-service")
+                .intercept(MetadataUtils.newAttachHeadersInterceptor(ClientConstants.getClientToken()))
                 .defaultLoadBalancingPolicy("round_robin")
                 .usePlaintext()
                 .build();
@@ -38,31 +40,20 @@ public class ClientSideLoadBalancingTest {
         this.bankServiceStub = BankServiceGrpc.newStub(managedChannel);
     }
 
-    @Test
+    @Test       // depending on the value uncommented in ClientConstants, this can either work or not :)
     public void balanceTest() {
         for (int i = 0; i < 100; i++) {
             BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
                     .setAccountNumber(ThreadLocalRandom.current().nextInt(1, 11))
                     .build();
-            var balance = this.blockingStub.getAccountBalance(balanceCheckRequest);
-            System.out.println("Received : " + balance.getBalance());
+            try {
+                var balance = this.blockingStub
+                        .getAccountBalance(balanceCheckRequest);
+                System.out.println("Received : " + balance.getBalance());
+            } catch (StatusRuntimeException e){
+                System.out.println(e.getStatus().getDescription());
+            }
         }
-    }
-
-    @Test
-    public void cashStreamingRequest() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        StreamObserver<DepositRequest> streamObserver = this.bankServiceStub.deposit(new BalanceStreamObserver(latch));
-        for (int i = 0; i < 10; i++) {
-            DepositRequest depositRequest = DepositRequest.newBuilder()
-                    .setAccountNumber(8)
-                    .setMoney(
-                            Money.newBuilder().setAmount(10).build()
-                    ).build();
-            streamObserver.onNext(depositRequest);
-        }
-        streamObserver.onCompleted();
-        latch.await();
     }
 
     @Test
