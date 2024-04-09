@@ -1,5 +1,6 @@
 package com.testehan.loadbalancing.clientside;
 
+import com.testehan.loadbalancing.deadline.DeadlineInterceptor;
 import com.testehan.loadbalancing.serverside.BalanceStreamObserver;
 import com.testehan.models.ex08.*;
 import io.grpc.*;
@@ -30,6 +31,7 @@ public class ClientSideLoadBalancingTest {
         ManagedChannel managedChannel = ManagedChannelBuilder
                 //.forAddress("localhost", 8585)
                 .forTarget("bank-service")
+                .intercept(new DeadlineInterceptor())
                 .defaultLoadBalancingPolicy("round_robin")
                 .usePlaintext()
                 .build();
@@ -59,7 +61,7 @@ public class ClientSideLoadBalancingTest {
                     .build();
             try {
                 var balance = this.blockingStub
-                        .withDeadlineAfter(2, TimeUnit.SECONDS)
+//                        .withDeadlineAfter(2, TimeUnit.SECONDS)           the best approach is to use the DeadlineInterceptor
                         .getAccountBalance(balanceCheckRequest);
                 System.out.println("Received : " + balance.getBalance());
             } catch (StatusRuntimeException e){

@@ -24,7 +24,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase{
                 .build();
 
         //simulate time-consuming call
-//        Uninterruptibles.sleepUninterruptibly(3, TimeUnit.SECONDS);
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
 
         // set the value to be returned
         responseObserver.onNext(accountBalance);
