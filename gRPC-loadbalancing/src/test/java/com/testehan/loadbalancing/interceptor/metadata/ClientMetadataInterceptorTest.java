@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -26,6 +27,7 @@ public class ClientMetadataInterceptorTest {
         instances.add("localhost:6565");        // GRpcServer1 instance
         instances.add("localhost:7575");        // GRpcServer2 instance
         instances.add("localhost:7373");        // GRpcServer3 instance
+        instances.add("localhost:7272");        // GRpcServer4 instance
         ServiceRegistry.register("dns:///bank-service", instances);
         NameResolverRegistry.getDefaultRegistry().register(new TempNameResolverProvider());
 
@@ -138,5 +140,27 @@ public class ClientMetadataInterceptorTest {
             System.out.println("A timeout occured on the server");
         }
 
+    }
+
+    @Test
+    public void withdrawTest_InsufficientFunds() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        var withdrawRequest = WithdrawRequest.newBuilder().setAccountNumber(10).setAmount(4000).build();
+
+        this.bankServiceStub.withdraw(withdrawRequest, new MoneyStreamingResponse(countDownLatch));
+
+        countDownLatch.await();     // wait until the Async call finishes
+    }
+
+    @Test
+    public void withdrawTest_notMultipleOf10() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        var withdrawRequest = WithdrawRequest.newBuilder().setAccountNumber(10).setAmount(3).build();
+
+        this.bankServiceStub.withdraw(withdrawRequest, new MoneyStreamingResponse(countDownLatch));
+
+        countDownLatch.await();     // wait until the Async call finishes
     }
 }
