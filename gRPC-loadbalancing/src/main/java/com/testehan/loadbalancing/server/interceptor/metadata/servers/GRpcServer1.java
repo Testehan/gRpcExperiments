@@ -1,5 +1,7 @@
-package com.testehan.loadbalancing.server.interceptor.metadata;
+package com.testehan.loadbalancing.server.interceptor.metadata.servers;
 
+import com.testehan.loadbalancing.server.interceptor.metadata.BankServiceWithMetadata;
+import com.testehan.loadbalancing.server.interceptor.metadata.interceptors.AuthInterceptor;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 

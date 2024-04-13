@@ -25,6 +25,7 @@ public class ClientMetadataInterceptorTest {
         List<String> instances = new ArrayList<>();
         instances.add("localhost:6565");        // GRpcServer1 instance
         instances.add("localhost:7575");        // GRpcServer2 instance
+        instances.add("localhost:7373");        // GRpcServer3 instance
         ServiceRegistry.register("dns:///bank-service", instances);
         NameResolverRegistry.getDefaultRegistry().register(new TempNameResolverProvider());
 
@@ -82,6 +83,40 @@ public class ClientMetadataInterceptorTest {
             try {
                 var balance = this.blockingStub
                         .withCallCredentials(new UserSessionToken("invalid-user-token"))
+                        .getAccountBalance(balanceCheckRequest);
+                System.out.println("Received : " + balance.getBalance());
+            } catch (StatusRuntimeException e){
+                System.out.println(e.getStatus().getDescription());
+            }
+        }
+    }
+
+    @Test
+    public void balanceTest_withValidUserTokenAndRolePrime() {
+        for (int i = 0; i < 5; i++) {
+            BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
+                    .setAccountNumber(ThreadLocalRandom.current().nextInt(1, 11))
+                    .build();
+            try {
+                var balance = this.blockingStub
+                        .withCallCredentials(new UserSessionToken("10d118f5-fe18-4d4a-94f5-e8de3877056e:prime"))
+                        .getAccountBalance(balanceCheckRequest);
+                System.out.println("Received : " + balance.getBalance());
+            } catch (StatusRuntimeException e){
+                System.out.println(e.getStatus().getDescription());
+            }
+        }
+    }
+
+    @Test
+    public void balanceTest_withValidUserTokenAndRoleStandard() {
+        for (int i = 0; i < 5; i++) {
+            BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
+                    .setAccountNumber(ThreadLocalRandom.current().nextInt(1, 11))
+                    .build();
+            try {
+                var balance = this.blockingStub
+                        .withCallCredentials(new UserSessionToken("10d118f5-fe18-4d4a-94f5-e8de3877056e:standard"))
                         .getAccountBalance(balanceCheckRequest);
                 System.out.println("Received : " + balance.getBalance());
             } catch (StatusRuntimeException e){

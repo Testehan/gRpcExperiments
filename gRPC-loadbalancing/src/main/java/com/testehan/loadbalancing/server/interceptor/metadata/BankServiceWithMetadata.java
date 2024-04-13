@@ -1,6 +1,8 @@
 package com.testehan.loadbalancing.server.interceptor.metadata;
 
 import com.google.common.util.concurrent.Uninterruptibles;
+import com.testehan.loadbalancing.server.interceptor.metadata.constants.ServerConstants;
+import com.testehan.loadbalancing.server.interceptor.metadata.constants.UserRole;
 import com.testehan.loadbalancing.server.repository.AccountRepository;
 import com.testehan.loadbalancing.server.request.CashStreamingRequest;
 import com.testehan.models.ex08.*;
@@ -17,9 +19,14 @@ public class BankServiceWithMetadata extends BankServiceGrpc.BankServiceImplBase
         var accountNumber = request.getAccountNumber();
         System.out.println("Got a request for acc number : " + accountNumber);
 
-        // some dummy value
+        var amount = AccountRepository.getBalance(accountNumber);
+
+        // this ServerConstants.CONTEXT_USER_ROLE.get() is something like a ThreadLocal..
+        UserRole userRole = ServerConstants.CONTEXT_USER_ROLE.get();
+        amount = UserRole.PRIME.equals(userRole) ? amount : (amount - 5);      // users with PRIME role don't have commissions...others do :(
+
         var accountBalance = AccountBalance.newBuilder()
-                .setBalance(AccountRepository.getBalance(accountNumber))
+                .setBalance(amount)
                 .setAccountNumber(accountNumber)
                 .build();
 
