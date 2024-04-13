@@ -57,6 +57,40 @@ public class ClientMetadataInterceptorTest {
     }
 
     @Test
+    public void balanceTest_withValidUserToken() {
+        for (int i = 0; i < 20; i++) {
+            BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
+                    .setAccountNumber(ThreadLocalRandom.current().nextInt(1, 11))
+                    .build();
+            try {
+                var balance = this.blockingStub
+                        .withCallCredentials(new UserSessionToken("29fad4bf-4943-41e1-bfd6-fca0793d97db"))
+                        .getAccountBalance(balanceCheckRequest);
+                System.out.println("Received : " + balance.getBalance());
+            } catch (StatusRuntimeException e){
+                System.out.println(e.getStatus().getDescription());
+            }
+        }
+    }
+
+    @Test
+    public void balanceTest_withInvalidUserToken() {
+        for (int i = 0; i < 20; i++) {
+            BalanceCheckRequest balanceCheckRequest = BalanceCheckRequest.newBuilder()
+                    .setAccountNumber(ThreadLocalRandom.current().nextInt(1, 11))
+                    .build();
+            try {
+                var balance = this.blockingStub
+                        .withCallCredentials(new UserSessionToken("invalid-user-token"))
+                        .getAccountBalance(balanceCheckRequest);
+                System.out.println("Received : " + balance.getBalance());
+            } catch (StatusRuntimeException e){
+                System.out.println(e.getStatus().getDescription());
+            }
+        }
+    }
+
+    @Test
     public void withdrawTest(){
         WithdrawRequest withdrawRequest = WithdrawRequest.newBuilder()
                 .setAccountNumber(6)

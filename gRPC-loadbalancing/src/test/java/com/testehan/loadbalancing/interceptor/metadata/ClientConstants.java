@@ -5,6 +5,7 @@ import io.grpc.Metadata;
 public class ClientConstants {
 
     private static final Metadata METADATA = new Metadata();
+    public static final Metadata.Key<String> USER_TOKEN = Metadata.Key.of("user-token", Metadata.ASCII_STRING_MARSHALLER);
 
     static {
         // THIS will work because "some-bank-secret-token" is what the server expects
