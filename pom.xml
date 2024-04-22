@@ -14,6 +14,7 @@
         <module>gRPC-4-types</module>
         <module>gRPC-snake-ladders</module>
         <module>gRPC-loadbalancing</module>
+        <module>gRPC-spring-boot</module>
     </modules>
 
   <properties>
