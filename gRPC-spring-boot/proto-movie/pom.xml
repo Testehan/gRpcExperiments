@@ -10,12 +10,13 @@
     <artifactId>proto-movie</artifactId>
     <packaging>jar</packaging>
 
-    <name>proto</name>
+    <name>proto-movie</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <grpc.version>1.60.0</grpc.version>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
     <dependencies>
