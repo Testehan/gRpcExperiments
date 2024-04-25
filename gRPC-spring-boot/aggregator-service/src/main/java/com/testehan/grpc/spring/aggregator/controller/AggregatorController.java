@@ -20,8 +20,8 @@ public class AggregatorController {
     }
 
     @PutMapping("/user")
-    public void setUserGenre(@RequestBody UserGenre userGenre){
-        this.userMovieService.setUserGenre(userGenre);
+    public UserGenre setUserGenre(@RequestBody UserGenre userGenre){
+        return this.userMovieService.setUserGenre(userGenre);
     }
 
 }

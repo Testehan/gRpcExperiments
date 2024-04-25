@@ -38,13 +38,17 @@ public class UserMovieService {
                 .collect(Collectors.toList());
     }
 
-    public void setUserGenre(UserGenre userGenre){
+    public UserGenre setUserGenre(UserGenre userGenre){
         UserGenreUpdateRequest userGenreUpdateRequest = UserGenreUpdateRequest.newBuilder()
                 .setLoginId(userGenre.getLoginId())
                 .setGenre(Genre.valueOf(userGenre.getGenre().toUpperCase()))
                 .build();
 
         UserResponse userResponse = this.userStub.updateUserGenre(userGenreUpdateRequest);
+        var userGenreUpdated = UserGenre.builder()
+                .genre(userResponse.getGenre().toString())
+                .loginId(userResponse.getLoginId()).build();
+        return userGenreUpdated;
     }
 
 
